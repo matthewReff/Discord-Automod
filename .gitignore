@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# don't include generated batch files
+*.bat
+
+# don't include txt files unless asked nicely
+*.txt
