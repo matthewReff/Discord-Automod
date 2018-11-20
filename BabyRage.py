@@ -10,14 +10,14 @@ from discord import opus
 from discord.ext.commands import Bot
 from discord.ext import commands
 
-
 currentFileName = os.path.split(os.path.abspath(__file__))[0]
 botTextsDir = os.path.join(currentFileName,'bot texts')
 #generates seed for random by smashing together hours/minutes/seconds of the current time
 random.seed(int(str(time.localtime()[3]) + str(time.localtime()[4]) + str(time.localtime()[5])))
-         
+      
+    
 #loads in all elements from config txt file,
-def config():
+def setConfig():
     settings=[]
     settingsDesc=[]
     with open(os.path.join(botTextsDir,'config.txt'),'r') as config: #open config.txt as config, in read mode
@@ -29,18 +29,23 @@ def config():
                 continue
                 
     botPrefix = settings[0]
+    botToken = str(settings[1])
     
-    if settings[1] == "''":
-        print('''\n\nYou don\'t have a token in your config file. You can find it at
-https://discordapp.com/developers/applications/ in your bot account\'s bot tab.\n\n''')
+    if botToken == "''":
+        print('\n\nPut your bot token into the config before running your bot, or else it will give scary errors.\n\n')
         time.sleep(3)
         exit()
-    botToken = str(settings[1])
     print('Loaded the following settings from config: ')
     for i in range(0,len(settings)-1):
         print(settingsDesc[i] + ':\n' + settings[i])
     print("")
     return botPrefix, botToken
+
+botPrefix, botToken = setConfig()
+Client = discord.Client() #often called bot in api and examples
+client = commands.Bot(command_prefix = botPrefix) #used when referencing discord.Client commands in api
+logging.basicConfig(level = logging.INFO)
+
 
 #passes a dict and a filename, to save the dict to the file
 def dictWrite(setdict,filename):
@@ -65,14 +70,6 @@ def dictRead(filename):
     return setdict 
 
     
-botPrefix, botToken = config()
-Client = discord.Client() #often called bot in api and examples
-client = commands.Bot(command_prefix = botPrefix) #used when referencing discord.Client commands in api
-logging.basicConfig(level = logging.INFO)
-
-client.run(botToken) #client botToken
-
-
 #displays message when bot becomes usable
 @client.event
 async def on_ready():  
@@ -88,7 +85,6 @@ async def ping():
     '''
     await client.say(makeBottyString("Pong!"))
     
+            
     
-
-
-
+client.run(botToken) #client botToken
