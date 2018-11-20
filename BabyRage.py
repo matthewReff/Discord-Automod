@@ -23,8 +23,11 @@ def setConfig():
     with open(os.path.join(botTextsDir,'config.txt'),'r') as config: #open config.txt as config, in read mode
         for line in config:
             try:
-                settings.append((line.split(':')[1])[:-1]) #shaves off \n from output, fix spaghetti later
-                settingsDesc.append((line.split(':')[0]))
+                splitLine = line.split(':')
+                settingName = splitLine[0]
+                settingValue = splitLine[1].strip()
+                settingsDesc.append(settingName)
+                settings.append(settingValue)
             except(IndexError):
                 continue
                 
@@ -83,8 +86,21 @@ async def ping():
     '''
     Used to test if bot is responding
     '''
-    await client.say(makeBottyString("Pong!"))
+    await client.say("Pong!")
     
+@client.event            
+async def on_message(message): 
+        #print(message.content)
+        swears = ["potato", "tomato"]
+        for word in swears:
+            if word in message.content:
+                await client.delete_message(message)
+                censoredWord = ""
+                censoredWord += word[0]
+                for i in range(1, len(word)):
+                    censoredWord += "-"
+                print(censoredWord)
+                print(word) 
+                await client.send_message(message.author, (censoredWord + " is a banned word on this server, any messages that contain it will be removed."))
             
-    
 client.run(botToken) #client botToken
