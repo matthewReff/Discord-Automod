@@ -1,0 +1,7 @@
+:eggplant:
+:hot_pepper:
+:corn:
+:peach:
+:watermelon:
+:grapes:
+:apple:
